@@ -45,7 +45,6 @@
           <button type="button" class="select-like rule-trigger" id="calculationRuleTrigger" role="combobox" aria-labelledby="calculationRuleLabel calculationRuleText" aria-controls="calculationRuleMenu" aria-haspopup="listbox" aria-expanded="false" aria-required="false" aria-invalid="false" aria-describedby="calculationRuleError calculationRuleHelp"><span class="placeholder" id="calculationRuleText">请选择积分计算规则</span><span class="arrow" aria-hidden="true">⌄</span></button>
           <div class="rule-menu" id="calculationRuleMenu" role="listbox" aria-label="积分计算规则">
             <div class="rule-option" data-value="highest" role="option" aria-selected="false" tabindex="-1"><div class="rule-title">最高分</div><div class="rule-desc">各评价项分别取最高有效得分，再相加。</div></div>
-            <div class="rule-option" data-value="average" role="option" aria-selected="false" tabindex="-1"><div class="rule-title">平均分</div><div class="rule-desc">各项有效评分总和 ÷ 有效评分记录数，再相加。</div></div>
             <div class="rule-option" data-value="sum" role="option" aria-selected="false" tabindex="-1"><div class="rule-title">累计得分</div><div class="rule-desc">各评价项的全部有效评分累加。</div></div>
             <div class="rule-option" data-value="latest" role="option" aria-selected="false" tabindex="-1"><div class="rule-title">最后一次得分</div><div class="rule-desc">各评价项分别取最后一次有效得分，再相加。</div></div>
           </div>
@@ -68,36 +67,36 @@
 </div>
 
 <div class="drawer-mask" id="drawerMask"><aside class="drawer"><div class="drawer-head"><h2>本次修改规则（PRD）</h2><button class="close" id="drawerClose">关闭</button></div><div class="drawer-body">
-  <span class="change-chip"><i></i> 积分到账时间与计算规则 · 2026-11-18</span>
+  <span class="change-chip"><i></i> 积分到账时间与计算规则 · 2026-11-19</span>
   <div class="prd-block"><h3>1. 背景与目标</h3><p>将原积分规则拆分为到账时间与计算规则，支持逐笔到账、按评分周期结算、活动结束统一结算。管理员分别配置到账时机与得分算法，消除二者绑定造成的配置限制。</p></div>
   <div class="prd-block"><h3>2. 用户与使用场景</h3><p>学校评价管理员在新建活动的“评价设置”步骤配置手动评分积分。过程奖励使用立即到账；阶段性评价使用周期到账；活动终评使用活动结束到账。积分卡沿用原有累计方式和到账时间。</p></div>
   <div class="prd-block"><h3>3. 需求范围</h3><h4>In Scope</h4><p>两个单选下拉框、条件显示与必填校验、动态计算说明、本地保存回显、评分周期联动、需求说明抽屉。</p><h4>Out of Scope</h4><p>后端接口、真实评分计算、定时结算、实际积分流水、已发布活动配置变更、历史活动数据迁移及积分卡规则改造。本页保存与发布为本地原型反馈。</p></div>
   <div class="prd-block"><h3>4. 功能需求列表</h3><table class="rule-table requirements-table"><thead><tr><th>功能模块</th><th>功能点</th><th>需求描述</th><th>优先级（P0 / P1 / P2）</th><th>备注说明</th></tr></thead><tbody>
     <tr><td>积分设置</td><td>到账时间</td><td>单选必填，提供立即到账、周期到账、活动结束到账；默认立即到账。</td><td>P0</td><td>仅手动评分</td></tr>
-    <tr><td>积分设置</td><td>计算规则</td><td>延迟到账时显示并必填；最高分、平均分、累计得分、最后一次得分，首次无默认值。</td><td>P0</td><td>按各评价项分别计算再相加</td></tr>
+    <tr><td>积分设置</td><td>计算规则</td><td>延迟到账时显示并必填；最高分、累计得分、最后一次得分，首次无默认值。</td><td>P0</td><td>按各评价项分别计算再相加</td></tr>
     <tr><td>表单联动</td><td>切换与校验</td><td>两种延迟到账互切保留规则；切回立即到账清空规则。未选择必填项时拦截保存和发布并定位错误。</td><td>P0</td><td>立即到账固定累计</td></tr>
     <tr><td>结算说明</td><td>周期边界</td><td>周期到账沿用评分周期，按自然日、周一至周日、自然月或整个活动划分。</td><td>P0</td><td>活动结束结清不足周期</td></tr>
     <tr><td>本地原型</td><td>保存与回显</td><td>保存到账时间、计算规则和评分周期；刷新后回显。存储失败不显示成功。</td><td>P1</td><td>无真实结算</td></tr>
     <tr><td>交互可用性</td><td>下拉与键盘</td><td>支持单选高亮、键盘选择、Esc关闭、外部点击关闭及菜单方向适配。</td><td>P1</td><td>沿用页面绿色样式</td></tr>
   </tbody></table></div>
-  <div class="prd-block"><h3>5. 核心流程与交互说明</h3><ol><li>默认立即到账，计算规则隐藏；每条有效手动评分逐笔累加。</li><li>选择周期到账或活动结束到账，显示无默认值的必填计算规则；选择后展示对应算法和示例。</li><li>周期到账：对当前周期内每位被评价人的各项记录分别计算并汇总，周期结束后到账，活动总分为各周期实际结算结果之和。</li><li>活动结束到账：对整个活动的各项记录分别计算并汇总，一次到账；不先拆分评分周期。</li><li>最高分取每项最高有效得分；累计得分累加全部有效得分；最后一次得分取每项最后一条有效记录。</li><li>平均分按每项有效评分总和÷有效评分记录数计算，再将各项相加；同一评价者多次有效评分分别计数，无评分不补零。中间过程不舍入，每次结算汇总后统一四舍五入至两位小数。</li><li>保存或发布时校验计算规则；通过后本地保存两个字段、评分周期及原评分结果权限，并显示原型成功反馈。</li></ol>
+  <div class="prd-block"><h3>5. 核心流程与交互说明</h3><ol><li>默认立即到账，计算规则隐藏；每条有效手动评分逐笔累加。</li><li>选择周期到账或活动结束到账，显示无默认值的必填计算规则；选择后展示对应算法和示例。</li><li>周期到账：对当前周期内每位被评价人的各项记录分别计算并汇总，周期结束后到账，活动总分为各周期实际结算结果之和。</li><li>活动结束到账：对整个活动的各项记录分别计算并汇总，一次到账；不先拆分评分周期。</li><li>最高分取每项最高有效得分；累计得分累加全部有效得分；最后一次得分取每项最后一条有效记录。</li><li>保存或发布时校验计算规则；通过后本地保存两个字段、评分周期及原评分结果权限，并显示原型成功反馈。</li></ol>
     <div class="formula">每次结算手动积分 = Σ（各评价项在本次结算范围内按所选规则计算的结果）<br>周期到账活动总分 = Σ（各周期实际结算手动积分）<br>积分卡另按原规则处理。</div>
-    <h4>跨周期示例</h4><p>同一评价项，第1天得分2、6，第2天得分4；评分周期为每天。</p><table class="rule-table"><thead><tr><th>规则</th><th>周期到账总分</th><th>活动结束到账</th></tr></thead><tbody><tr><td>最高分</td><td>6 + 4 = 10</td><td>6</td></tr><tr><td>平均分</td><td>4 + 4 = 8</td><td>4</td></tr><tr><td>累计得分</td><td>8 + 4 = 12</td><td>12</td></tr><tr><td>最后一次得分</td><td>6 + 4 = 10</td><td>4</td></tr></tbody></table>
+    <h4>跨周期示例</h4><p>同一评价项，第1天得分2、6，第2天得分4；评分周期为每天。</p><table class="rule-table"><thead><tr><th>规则</th><th>周期到账总分</th><th>活动结束到账</th></tr></thead><tbody><tr><td>最高分</td><td>6 + 4 = 10</td><td>6</td></tr><tr><td>累计得分</td><td>8 + 4 = 12</td><td>12</td></tr><tr><td>最后一次得分</td><td>6 + 4 = 10</td><td>4</td></tr></tbody></table>
   </div>
-  <div class="prd-block"><h3>6. 异常场景与边界条件</h3><ul><li>周期边界使用学校所在时区。活动首尾与自然周期取交集，活动结束结清最后一个不足周期；无评分周期不计分，缺失评价项不补零。</li><li>评分周期为活动周期时，周期到账与活动结束到账的计算范围和到账时机一致。</li><li>切回立即到账后计算规则不参与提交；再次切入延迟到账须重新选择。两种延迟到账方式互切保留当前选择。</li><li>【假设】有效记录为未删除、未撤销且审核通过（无需审核时为已提交）的评分。最后一次按业务发生时间判定，同一时间取记录 ID 较大者；失效记录不参与计算。</li><li>【假设】已结算记录变更、补评、活动重开及到账冲正由后续后端需求定义，本次原型不执行这些业务。</li><li>本地存储不可用时显示“本地保存失败，请检查浏览器存储设置后重试”，不显示保存或发布成功。</li></ul></div>
-  <div class="prd-block"><h3>7. 数据口径与埋点需求</h3><p>计算分组为活动＋被评价人＋评价项＋结算范围。立即到账逐笔处理；周期到账使用当前周期；活动结束到账使用整个活动。平均分分母为有效评分记录数，各周期已舍入的实际结果再累加。</p><p>本地配置字段：timing（immediate / period / activity_end）、calculation（highest / average / sum / latest；立即到账为 null）、period（day / week / month / activity）。这些字段仅为本地原型状态，不代表已发布 API 契约。</p><p>【假设】后续接入埋点：settlement_timing_change（到账时间）、settlement_calculation_change（计算规则）、settlement_validation_failed（缺失字段）、settlement_settings_saved（配置及操作类型）。本次不发送网络请求，不采集人员信息。</p></div>
-  <div class="prd-block"><h3>8. 风险、依赖与限制</h3><p>正式结算依赖学校时区、有效评分状态、评分时间、评价项标识与周期任务，结算任务须保证幂等。不同算法产生不同积分，平均分不得按全部评分合并计算或按评价者去重。当前仅交付配置交互与计算说明，成功提示不代表活动已发布至平台。</p></div>
-  <div class="prd-block"><h3>9. 验收标准</h3><ol><li>默认立即到账且不显示计算规则；延迟到账显示四种计算规则并标记必填。</li><li>延迟到账未选规则时，保存与发布均显示字段错误，不更新本地配置，不出现成功反馈。</li><li>延迟到账互切保留规则；切回立即到账清空规则及错误；再次切入不恢复旧值。</li><li>三种到账时间、八种延迟到账组合说明准确，评分周期切换时说明同步刷新。</li><li>同一项2→6→4的最高分、平均分、累计、最后一次分别为6、4、12、4；不同项分别计算后相加；跨周期示例符合第5节。</li><li>保存后刷新正确回显到账时间、规则和评分周期；立即到账配置中 calculation 为 null。</li><li>菜单无异常遮挡、键盘可操作；原有审核、次数、评分结果权限与需求抽屉交互正常。</li></ol></div>
+  <div class="prd-block"><h3>6. 异常场景与边界条件</h3><ul><li>周期边界使用学校所在时区。活动首尾与自然周期取交集，活动结束结清最后一个不足周期；无评分周期不计分，缺失评价项不补零。</li><li>评分周期为活动周期时，周期到账与活动结束到账的计算范围和到账时机一致。</li><li>切回立即到账后计算规则不参与提交；再次切入延迟到账须重新选择。两种延迟到账方式互切保留当前选择。</li><li>历史本地配置包含已下线计算规则时，回显为空并要求重新选择；不得自动改为其他算法。</li><li>【假设】有效记录为未删除、未撤销且审核通过（无需审核时为已提交）的评分。最后一次按业务发生时间判定，同一时间取记录 ID 较大者；失效记录不参与计算。</li><li>【假设】已结算记录变更、补评、活动重开及到账冲正由后续后端需求定义，本次原型不执行这些业务。</li><li>本地存储不可用时显示“本地保存失败，请检查浏览器存储设置后重试”，不显示保存或发布成功。</li></ul></div>
+  <div class="prd-block"><h3>7. 数据口径与埋点需求</h3><p>计算分组为活动＋被评价人＋评价项＋结算范围。立即到账逐笔处理；周期到账使用当前周期；活动结束到账使用整个活动。各周期实际结算结果再累加。</p><p>本地配置字段：timing（immediate / period / activity_end）、calculation（highest / sum / latest；立即到账为 null）、period（day / week / month / activity）。这些字段仅为本地原型状态，不代表已发布 API 契约。</p><p>【假设】后续接入埋点：settlement_timing_change（到账时间）、settlement_calculation_change（计算规则）、settlement_validation_failed（缺失字段）、settlement_settings_saved（配置及操作类型）。本次不发送网络请求，不采集人员信息。</p></div>
+  <div class="prd-block"><h3>8. 风险、依赖与限制</h3><p>正式结算依赖学校时区、有效评分状态、评分时间、评价项标识与周期任务，结算任务须保证幂等。不同算法产生不同积分，计算须按各评价项分别处理后汇总。当前仅交付配置交互与计算说明，成功提示不代表活动已发布至平台。</p></div>
+  <div class="prd-block"><h3>9. 验收标准</h3><ol><li>默认立即到账且不显示计算规则；延迟到账显示三种计算规则并标记必填。</li><li>延迟到账未选规则时，保存与发布均显示字段错误，不更新本地配置，不出现成功反馈。</li><li>延迟到账互切保留规则；切回立即到账清空规则及错误；再次切入不恢复旧值。</li><li>三种到账时间、六种延迟到账组合说明准确，评分周期切换时说明同步刷新。</li><li>同一项2→6→4的最高分、累计、最后一次分别为6、12、4；不同项分别计算后相加；跨周期示例符合第5节。</li><li>保存后刷新正确回显到账时间、规则和评分周期；立即到账配置中 calculation 为 null。</li><li>菜单无异常遮挡、键盘可操作；原有审核、次数、评分结果权限与需求抽屉交互正常。</li></ol></div>
 </div></aside></div>
 <div class="toast" id="toast">操作成功</div>
 <script>
 const $=s=>document.querySelector(s),resultTrigger=$('#resultTrigger'),resultMenu=$('#resultMenu'),toast=$('#toast');
 const settlement={timing:'immediate',calculation:null};
 const timingLabels={immediate:'立即到账',period:'周期到账',activity_end:'活动结束到账'};
-const calculationLabels={highest:'最高分',average:'平均分',sum:'累计得分',latest:'最后一次得分'};
+const calculationLabels={highest:'最高分',sum:'累计得分',latest:'最后一次得分'};
 const periodNotes={day:'每天按学校所在时区的自然日划分',week:'每周按学校所在时区的周一至周日划分',month:'每月按学校所在时区的自然月划分',activity:'按整个活动划分，与活动结束到账的计算范围和到账时间一致'};
-const calculationNotes={highest:'各评价项分别取本次结算范围内的最高有效得分，再相加。',average:'各评价项分别按有效评分总和 ÷ 有效评分记录数计算平均分，再相加。同一评价者多次评分分别计数，无评分不补零；中间过程不舍入，每次结算汇总后统一四舍五入至两位小数。',sum:'各评价项的全部有效评分累加，再汇总到账。',latest:'各评价项分别取本次结算范围内最后一次有效得分，再相加。'};
-const calculationExamples={highest:'6分',average:'4分',sum:'12分',latest:'4分'};
+const calculationNotes={highest:'各评价项分别取本次结算范围内的最高有效得分，再相加。',sum:'各评价项的全部有效评分累加，再汇总到账。',latest:'各评价项分别取本次结算范围内最后一次有效得分，再相加。'};
+const calculationExamples={highest:'6分',sum:'12分',latest:'4分'};
 const settlementStorageKey='evaluationSettlementSettingsV2';
 function readStorage(key){try{return localStorage.getItem(key)}catch{return null}}
 function showToast(text){toast.textContent=text;toast.classList.add('show');clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>toast.classList.remove('show'),1800)}
